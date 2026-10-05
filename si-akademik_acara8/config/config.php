@@ -14,4 +14,4 @@ if (file_exists($file)) {
 }
 );
 // Pastikan diawali dengan garis miring '/'
-define('BASE_URL', '/si-akademik_acara8/public');
+define('BASE_URL', '/setoran_BKPM-1/si-akademik_acara8/public');

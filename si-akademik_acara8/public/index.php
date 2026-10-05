@@ -9,12 +9,14 @@ $routes = require __DIR__ . '/../routes/web.php';
 // 2. Tangkap URI dan Method HTTP
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method     = $_SERVER['REQUEST_METHOD'];
-// 3. Potong BASE_URL secara presisi
+// 3. Potong base path otomatis (ikut lokasi folder public saat ini)
+$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
 $uri = $requestUri;
-if (defined('BASE_URL') && !empty(BASE_URL)) {
-    if (str_starts_with($uri, BASE_URL)) {
-        $uri = substr($uri, strlen(BASE_URL));
-    }
+if ($basePath !== '' && str_starts_with($uri, $basePath)) {
+    $uri = substr($uri, strlen($basePath));
+}
+if ($uri === '' || $uri === false) {
+    $uri = '/';
 }
 // 4. Serahkan ke Router (app/Core/Router.php) untuk dicocokkan,
 //    dijalankan middleware-nya, lalu memanggil Controller yang sesuai.

@@ -21,4 +21,4 @@ spl_autoload_register(function ($class) {
 
 // supaya tetap benar walau URL sudah bertingkat (misal /mahasiswa/23001).
 // Sesuaikan dengan nama folder project kamu di htdocs.
-define('BASE_URL', '/si-akademik_acara5/public');
+define('BASE_URL', '/setoran_BKPM-1/si-akademik_acara5/public');
