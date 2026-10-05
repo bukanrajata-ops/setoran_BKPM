@@ -1,0 +1,4 @@
+Folder ini disediakan sesuai struktur folder lengkap pada BKPM Acara 6,
+untuk menampung Service class (logika bisnis) pada pengembangan berikutnya.
+Belum ada file di sini karena logika bisnis Acara 6 masih ditulis langsung
+di Controller.
