@@ -27,7 +27,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Login SI Akademik</h5>
+                    <h5 class="mb-0">Masuk ke SI Akademik</h5>
                 </div>
                 <div class="card-body">
                     <form action="<?= BASE_URL ?>/login" method="POST">
