@@ -1,0 +1,17 @@
+# Dependency
+/vendor/
+/node_modules/
+
+# Konfigurasi lokal & data sensitif
+.env
+
+# Log
+/storage/logs/*
+
+# File bawaan sistem operasi
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
