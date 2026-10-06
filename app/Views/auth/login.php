@@ -33,11 +33,11 @@
                     <form action="<?= BASE_URL ?>/login" method="POST">
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" required autofocus>
+                            <input type="text" name="username" class="form-control" placeholder="Masukkan username" autocomplete="username" required autofocus>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" autocomplete="current-password" required>
                             <div class="form-check mt-2">
                                 <input class="form-check-input" type="checkbox" id="showPassword">
                                 <label class="form-check-label small" for="showPassword">Tampilkan password</label>
