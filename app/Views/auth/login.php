@@ -37,7 +37,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required>
+                            <input type="password" name="password" id="password" class="form-control" required>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showPassword">
+                                <label class="form-check-label small" for="showPassword">Tampilkan password</label>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </form>
@@ -47,5 +51,11 @@
         </div>
     </div>
 </div>
+<script>
+    // Fitur login: tampilkan / sembunyikan password
+    document.getElementById('showPassword').addEventListener('change', function () {
+        document.getElementById('password').type = this.checked ? 'text' : 'password';
+    });
+</script>
 </body>
 </html>
