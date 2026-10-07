@@ -61,3 +61,5 @@ edit kode -> git add -> git commit -> git push -> GitHub
 | `git push` | mengirim commit dari laptop ke GitHub |
 | `git pull` | mengambil perubahan terbaru dari GitHub |
 | `git clone` | mengambil seluruh project dari GitHub untuk pertama kali |
+
+Acara 11: Git dasar (add, commit, push, pull, clone).
