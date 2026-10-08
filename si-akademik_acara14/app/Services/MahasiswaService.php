@@ -59,13 +59,16 @@ class MahasiswaService
     public function create(array $input): array
     {
         $data = $this->normalize($input);
-        $errors = $this->validate($data);
 
-        if (!empty($errors)) {
-            return $this->failed($errors, $data);
-        }
-
+        // Acara 14: validate() juga mengakses database (existsByNim),
+        // jadi harus berada di dalam try-catch.
         try {
+            $errors = $this->validate($data);
+
+            if (!empty($errors)) {
+                return $this->failed($errors, $data);
+            }
+
             $id = $this->repo->create($data);
         } catch (PDOException $e) {
             Logger::error('Gagal membuat data mahasiswa (nim=' . $data['nim'] . ')', $e);
@@ -89,24 +92,24 @@ class MahasiswaService
     {
         $data = $this->normalize($input);
 
-        if ($this->repo->findByNimData($oldNim) === null) {
-            return [
-                'success'  => false,
-                'message'  => 'Data mahasiswa tidak ditemukan.',
-                'errors'   => [],
-                'data'     => $data,
-                'notFound' => true,
-            ];
-        }
-
-        // NIM milik data ini sendiri tidak dihitung sebagai duplikat.
-        $errors = $this->validate($data, $oldNim);
-
-        if (!empty($errors)) {
-            return $this->failed($errors, $data);
-        }
-
         try {
+            if ($this->repo->findByNimData($oldNim) === null) {
+                return [
+                    'success'  => false,
+                    'message'  => 'Data mahasiswa tidak ditemukan.',
+                    'errors'   => [],
+                    'data'     => $data,
+                    'notFound' => true,
+                ];
+            }
+
+            // NIM milik data ini sendiri tidak dihitung sebagai duplikat.
+            $errors = $this->validate($data, $oldNim);
+
+            if (!empty($errors)) {
+                return $this->failed($errors, $data);
+            }
+
             $this->repo->updateByNim($oldNim, $data);
         } catch (PDOException $e) {
             Logger::error('Gagal mengubah data mahasiswa (nim=' . $oldNim . ')', $e);
@@ -229,9 +232,11 @@ class MahasiswaService
             return $this->failed(['nim' => 'NIM sudah terdaftar'], $data);
         }
 
+        // Acara 14: pesan aman untuk pengguna, tanpa detail teknis database.
+        // Detail error sudah dicatat ke app.log lewat Logger::error() di atas.
         return [
             'success' => false,
-            'message' => 'Data gagal disimpan karena kesalahan database.',
+            'message' => 'Data gagal disimpan.',
             'errors'  => [],
             'data'    => $data,
         ];

@@ -16,4 +16,4 @@ if (file_exists($file)) {
 // Pastikan diawali dengan garis miring '/'
 // Versi aplikasi (ditampilkan pada footer)
 define('APP_VERSION', '1.1.0');
-define('BASE_URL', '/setoran_BKPM-1/si-akademik_acara11/public');
+define('BASE_URL', '/setoran_BKPM-1/si-akademik_acara13/public');

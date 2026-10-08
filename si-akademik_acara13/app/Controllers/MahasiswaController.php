@@ -13,8 +13,8 @@ class MahasiswaController extends BaseController
 {
     private MahasiswaService $service;
 
-    public function __construct(MahasiswaService $service)
-    {
+        public function __construct(MahasiswaService $service)
+        {
         $this->service = $service;
     }
 
