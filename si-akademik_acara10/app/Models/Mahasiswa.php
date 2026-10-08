@@ -17,8 +17,7 @@ class Mahasiswa
         string $angkatan = '',
         string $status = 'aktif'
     ) {
-        // Data dari database tetap dapat ditampilkan.
-        // Validasi diterapkan melalui setter saat data diubah dari input.
+
         $this->nim = $nim;
         $this->nama = $nama;
         $this->prodi = $prodi;
