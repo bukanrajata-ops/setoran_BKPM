@@ -1,0 +1,3 @@
+# Normalisasi line ending agar konsisten antara Windows dan Linux/Mac
+* text=auto
+*.png binary
