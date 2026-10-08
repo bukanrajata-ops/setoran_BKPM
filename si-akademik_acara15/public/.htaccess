@@ -1,0 +1,8 @@
+  RewriteEngine On
+
+  # Acara 15: URL bersih untuk API -> /api/mahasiswa
+  RewriteRule ^api/mahasiswa/?$ api/mahasiswa.php [QSA,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [QSA,L]

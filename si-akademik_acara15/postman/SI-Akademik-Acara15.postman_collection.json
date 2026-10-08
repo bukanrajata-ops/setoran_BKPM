@@ -1,0 +1,170 @@
+{
+  "info": {
+    "name": "SI Akademik - Acara 15 (API Mahasiswa)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/setoran_BKPM-1/si-akademik_acara11/public"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET semua mahasiswa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET mahasiswa id=1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET id tidak ada (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php?id=999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST tambah mahasiswa (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"23004\",\n  \"nama\": \"Dewi\",\n  \"email\": \"dewi@gmail.com\",\n  \"prodi_id\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "POST NIM duplikat (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"23001\",\n  \"nama\": \"Budi\",\n  \"email\": \"budi@gmail.com\",\n  \"prodi_id\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "POST data tidak valid (422)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa.php",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa.php"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"23005\",\n  \"nama\": \"\",\n  \"email\": \"bukan-email\",\n  \"prodi_id\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
