@@ -1,0 +1,9 @@
+  RewriteEngine On
+
+  # Acara 16: URL RESTful -> /api/mahasiswa dan /api/mahasiswa/{id}
+  RewriteRule ^api/mahasiswa/?$ api/mahasiswa.php [QSA,L]
+  RewriteRule ^api/mahasiswa/([^/]+)/?$ api/mahasiswa.php?id=$1 [QSA,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [QSA,L]

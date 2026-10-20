@@ -1,0 +1,5 @@
+# Acara 16: alamat API sesuai BKPM tanpa "/public"
+#   /api/mahasiswa/1  ->  public/api/mahasiswa/1  (lalu diproses public/.htaccess)
+RewriteEngine On
+RewriteRule ^$ public/ [L]
+RewriteRule ^(?!public/)(.*)$ public/$1 [L]

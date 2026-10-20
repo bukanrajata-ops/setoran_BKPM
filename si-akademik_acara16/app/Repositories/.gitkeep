@@ -1,0 +1,4 @@
+Folder ini disediakan sesuai struktur folder lengkap pada BKPM Acara 6,
+untuk menampung Repository class (akses data/database) pada pengembangan
+berikutnya. Belum ada file di sini karena data mahasiswa/dosen masih
+hardcode di dalam Model.

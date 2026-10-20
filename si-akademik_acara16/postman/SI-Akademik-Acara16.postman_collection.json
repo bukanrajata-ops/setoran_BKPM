@@ -1,0 +1,809 @@
+{
+  "info": {
+    "name": "SI Akademik - Acara 16 (RESTful API Mahasiswa)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Urutan request harus dijalankan dari atas ke bawah pada database awal (3 data contoh), karena POST membuat id=4 yang dipakai PUT/PATCH/DELETE."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/setoran_BKPM-1/si-akademik_acara16"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 GET semua mahasiswa (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        }
+      }
+    },
+    {
+      "name": "02 GET mahasiswa id=1 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 POST tambah mahasiswa (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23004\",\"nama\":\"Dewi\",\"email\":\"dewi@gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "04 PUT ubah seluruh data id=4 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/4",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "4"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23004\",\"nama\":\"Dewi Lestari\",\"email\":\"dewi.lestari@gmail.com\",\"prodi_id\":1,\"angkatan\":2023,\"status\":\"aktif\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "05 PATCH ubah sebagian data id=4 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/4",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "4"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"status\":\"cuti\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "06 DELETE hapus mahasiswa id=4 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = true', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/4",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "4"
+          ]
+        }
+      }
+    },
+    {
+      "name": "07 GET id=4 setelah dihapus (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/4",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "4"
+          ]
+        }
+      }
+    },
+    {
+      "name": "08 GET id tidak ditemukan (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/99",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "99"
+          ]
+        }
+      }
+    },
+    {
+      "name": "09 GET id bukan angka (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "abc"
+          ]
+        }
+      }
+    },
+    {
+      "name": "10 POST NIM kosong (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', function () { pm.response.to.have.status(422); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"\",\"nama\":\"Rina\",\"email\":\"rina@gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "11 POST email tidak valid (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', function () { pm.response.to.have.status(422); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23005\",\"nama\":\"Rina\",\"email\":\"rina-gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "12 POST JSON tidak lengkap (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', function () { pm.response.to.have.status(422); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23006\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "13 POST JSON rusak (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23007\",\"nama\":\"Rina\"",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "14 POST NIM duplikat (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 409', function () { pm.response.to.have.status(409); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23001\",\"nama\":\"Budi Dua\",\"email\":\"budi2@gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "15 PUT id tidak ditemukan (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/99",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "99"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23099\",\"nama\":\"Hantu\",\"email\":\"hantu@gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "16 PUT NIM milik mahasiswa lain (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 409', function () { pm.response.to.have.status(409); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "2"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23001\",\"nama\":\"Siti\",\"email\":\"siti@gmail.com\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "17 PUT email tidak valid (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', function () { pm.response.to.have.status(422); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "2"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23002\",\"nama\":\"Siti\",\"email\":\"siti-gmail\",\"prodi_id\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "18 DELETE id tidak ditemukan (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/99",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "99"
+          ]
+        }
+      }
+    },
+    {
+      "name": "19 PUT tanpa id (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23002\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "20 POST ke URL ber-id (405)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 405', function () { pm.response.to.have.status(405); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });",
+              "pm.test('success = false', function () { pm.expect(pm.response.json().success).to.eql(false); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/mahasiswa/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "mahasiswa",
+            "1"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"23008\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
