@@ -1,0 +1,555 @@
+{
+  "info": {
+    "name": "SI Akademik - Acara 17 (API CRUD MVC)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Jalankan berurutan pada tabel mahasiswa dan buku yang masih kosong (id pertama = 1)."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/sistem-informasi-akademik/public"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 POST tambah mahasiswa (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201001\",\"nama\":\"Andi Saputra\",\"prodi\":\"Teknik Informatika\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "02 GET semua mahasiswa (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 GET mahasiswa id=1 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 PUT ubah mahasiswa id=1 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201001\",\"nama\":\"Andi Saputra Wijaya\",\"prodi\":\"Teknik Informatika\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "05 POST data kedua (persiapan uji duplikat) (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201002\",\"nama\":\"Budi Santoso\",\"prodi\":\"Sistem Informasi\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "06 POST NIM duplikat (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 409', function () { pm.response.to.have.status(409); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201001\",\"nama\":\"Dewi\",\"prodi\":\"Teknik Informatika\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "07 PUT NIM milik data lain (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 409', function () { pm.response.to.have.status(409); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "2"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201001\",\"nama\":\"Budi Santoso\",\"prodi\":\"Sistem Informasi\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "08 POST field tidak lengkap (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nim\":\"2201003\",\"prodi\":\"Teknik Informatika\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "09 DELETE mahasiswa id=1 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "10 GET id=1 setelah dihapus (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "11 POST buku (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "buku"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"judul\":\"Pemrograman PHP Dasar\",\"penulis\":\"Rina Putri\",\"tahun\":2024}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "12 GET semua buku (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "buku"
+          ]
+        }
+      }
+    },
+    {
+      "name": "13 GET resource tidak terdaftar (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/dosen",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "dosen"
+          ]
+        }
+      }
+    },
+    {
+      "name": "14 PATCH method tidak didukung (405)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 405', function () { pm.response.to.have.status(405); });",
+              "pm.test('Response JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "2"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nama\":\"X\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
