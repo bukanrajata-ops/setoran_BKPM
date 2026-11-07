@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Sistem Informasi Akademik</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="login-wrap">
+    <img src="logo.png" alt="Logo Politeknik Negeri Jember">
+    <section class="card kotak-login">
+      <div class="card-header">Login Sistem Akademik</div>
+      <div class="card-body">
+        <form id="form-login" novalidate>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+          <label class="centang"><input type="checkbox" id="tampil-password"> Tampilkan password</label>
+          <button type="submit" id="tombol-login">Login</button>
+        </form>
+        <div id="pesan" class="pesan" role="status" aria-live="polite" hidden></div>
+      </div>
+    </section>
+  </main>
+  <script src="common.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

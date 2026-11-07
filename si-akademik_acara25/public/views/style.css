@@ -1,0 +1,48 @@
+:root { --bg:#f8f9fa; --card:#fff; --text:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; --head:#e9ecef; --danger:#dc3545; --ok:#198754; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); }
+main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+p.sub { margin: 0 0 1.25rem; color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.bar { display:flex; justify-content: space-between; align-items:center; gap:.5rem; flex-wrap:wrap; padding:.75rem 1rem; border-bottom:1px solid var(--line); }
+.aksi { display:flex; gap:.4rem; flex-wrap:wrap; }
+button { font: inherit; padding:.4rem .9rem; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+button:hover:not(:disabled) { filter: brightness(.92); }
+button.sekunder { background:transparent; color:var(--accent); }
+button.sekunder:hover:not(:disabled) { background:var(--accent); color:#fff; filter:none; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+button.bahaya { border-color:var(--danger); background:var(--danger); color:#fff; }
+button.kecil { padding:.2rem .6rem; font-size:.85rem; }
+table { width:100%; border-collapse: collapse; }
+th, td { text-align:left; padding:.65rem 1rem; border-bottom:1px solid var(--line); }
+th { background: var(--head); font-size:.85rem; text-transform: uppercase; letter-spacing:.03em; }
+tbody tr:last-child td { border-bottom: none; }
+td.kolom-aksi { white-space: nowrap; }
+.status, .pesan { padding: .75rem 1rem; text-align:center; color: var(--muted); }
+.status.galat, .pesan.galat { color: var(--danger); }
+.pesan.ok { color: var(--ok); }
+.ringkasan { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:1rem; }
+.ringkasan .card { padding: 1rem; }
+.ringkasan .angka { font-size:2rem; font-weight:700; }
+.ringkasan .label { color:var(--muted); font-size:.85rem; }
+.lencana { display:inline-block; padding:.1rem .6rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; text-transform:uppercase; }
+label { display:block; margin:.75rem 0 .25rem; font-size:.9rem; }
+input[type=text], input[type=password] { width:100%; padding:.5rem .65rem; border-radius:6px; border:1px solid #ced4da; background:#fff; color:var(--text); font:inherit; }
+.galat-field { color:var(--danger); font-size:.8rem; min-height:1rem; }
+form .aksi { margin-top:1rem; justify-content:flex-end; }
+.login-wrap { max-width: 420px; margin: 0 auto; padding: 2.5rem 1rem; text-align:center; }
+.login-wrap img { width:64px; height:auto; margin-bottom:.75rem; }
+.kotak-login { text-align:left; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.card-header { background: var(--accent); color:#fff; font-weight:600; font-size:1.2rem; padding:.7rem 1.1rem; }
+.card-body { padding: 1.1rem; }
+.card-body label { margin-top:.9rem; }
+.card-body label:first-child { margin-top:0; }
+.centang { display:flex; align-items:center; gap:.5rem; margin:.7rem 0 0; font-size:.9rem; }
+.kotak-login button[type=submit] { width:100%; margin-top:1rem; padding:.55rem; }
+dialog { border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--text); width:min(420px, 92vw); padding:1.25rem; }
+dialog::backdrop { background: rgba(0,0,0,.5); }
+dialog h2 { margin:0 0 .5rem; font-size:1.1rem; }
+@media (max-width: 560px) { th, td { padding:.5rem .6rem; font-size:.9rem; } }
+
+input:focus { outline:none; border-color:#86b7fe; box-shadow:0 0 0 .2rem rgba(13,110,253,.25); }

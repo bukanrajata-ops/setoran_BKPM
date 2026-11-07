@@ -1,0 +1,1458 @@
+{
+  "info": {
+    "name": "ACARA 26 - Test Case Blackbox (regresi JSON + RBAC)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Regresi 29 test case (25 Acara 23 + 4 RBAC Acara 25) setelah fitur upload foto ditambahkan. Akun budi harus berrole admin. Pengujian upload (multipart) dilakukan terpisah: lihat docs/TEST_CASE.md bagian 7."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "uname",
+      "value": ""
+    },
+    {
+      "key": "nim",
+      "value": ""
+    },
+    {
+      "key": "nim2",
+      "value": ""
+    },
+    {
+      "key": "nim3",
+      "value": ""
+    },
+    {
+      "key": "id1",
+      "value": ""
+    },
+    {
+      "key": "id2",
+      "value": ""
+    },
+    {
+      "key": "token_user",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "TC-04 Login kredensial benar (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-04: status 200\", function () { pm.response.to.have.status(200); });",
+              "var j = pm.response.json();",
+              "if (j.data && j.data.token) { pm.collectionVariables.set(\"token\", j.data.token); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Login. Token tersimpan otomatis ke {{token}} (berlaku 5 menit).",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"budi\",\n  \"password\": \"rahasia123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-05 Login kredensial salah (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-05: status 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"budi\",\n  \"password\": \"salah\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-06 Akses store tanpa token (401)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "function rnd(n){var s=\"\";for(var i=0;i<n;i++){s+=Math.floor(Math.random()*10);}return s;}",
+              "pm.collectionVariables.set(\"nim\", \"22\" + rnd(7));",
+              "pm.collectionVariables.set(\"nim2\", \"23\" + rnd(7));",
+              "pm.collectionVariables.set(\"nim3\", \"24\" + rnd(7));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-06: status 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Variabel nim, nim2, nim3 dibuat acak pada request ini agar Collection dapat dijalankan berulang.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-07 Register data valid (201)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "function rnd(n){var s=\"\";for(var i=0;i<n;i++){s+=Math.floor(Math.random()*10);}return s;}",
+              "pm.collectionVariables.set(\"uname\", \"tester\" + rnd(6));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-07: status 201\", function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{uname}}\",\n  \"email\": \"{{uname}}@example.com\",\n  \"password\": \"rahasia123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-08 Register email tidak valid (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-08: status 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{uname}}x\",\n  \"email\": \"tester-at-example\",\n  \"password\": \"abc12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-09 Register username duplikat (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-09: status 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{uname}}\",\n  \"email\": \"lain_{{uname}}@example.com\",\n  \"password\": \"abc12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-02 NIM kosong (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-02: status 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-10 NIM kurang dari 9 digit (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-10: status 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"12345\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-25 NIM lebih dari 9 digit (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-25: status 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"1234567890\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-01 NIM valid dan lengkap (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-01: status 201\", function () { pm.response.to.have.status(201); });",
+              "var j = pm.response.json();",
+              "if (j.data && j.data.id) { pm.collectionVariables.set(\"id1\", j.data.id); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-03 NIM duplikat (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-03: status 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Spesifikasi API (Acara 18) memakai 409 Conflict untuk duplikasi data.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-11 Ambil seluruh data mahasiswa (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-11: status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-12 Ambil satu data (id ada) (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-12: status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-13 Ambil satu data (id tidak ada) (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-13: status 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=999999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        },
+        "description": "",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "Setup: tambah data kedua (bukan test case)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Setup: status 201\", function () { pm.response.to.have.status(201); });",
+              "var j = pm.response.json();",
+              "if (j.data && j.data.id) { pm.collectionVariables.set(\"id2\", j.data.id); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "Menyiapkan data kedua untuk TC-17 dan TC-20.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim2}}\",\n  \"nama\": \"Siti Aminah\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-14 Update data valid (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-14: status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso Putra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-15 Update id tidak ada (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-15: status 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=999999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim3}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-16 Update NIM kurang dari 9 digit (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-16: status 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"12345\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-17 Update NIM milik data lain (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-17: status 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim2}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-18 Update tanpa token (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-18: status 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-19 Update body kosong (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-19: status 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-24 Update tanpa parameter id (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-24: status 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim3}}\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TC-22 Destroy tanpa token (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-22: status 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id2}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id2}}"
+            }
+          ]
+        },
+        "description": "",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-23 Destroy tanpa parameter id (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-23: status 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-21 Destroy id tidak ada (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-21: status 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=999999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "TC-20 Destroy id ada (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-20: status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id2}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id2}}"
+            }
+          ]
+        },
+        "description": ""
+      }
+    },
+    {
+      "name": "Cleanup: hapus data uji (bukan test case)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Cleanup: status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id={{id1}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{id1}}"
+            }
+          ]
+        },
+        "description": "Membersihkan data TC-01 agar Collection dapat dijalankan berulang."
+      }
+    },
+    {
+      "name": "TC-26 Login akun role user (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-26: status 200\", function () { pm.response.to.have.status(200); });",
+              "var j = pm.response.json();",
+              "pm.test(\"TC-26: role = user\", function () { pm.expect(j.data.role).to.eql(\"user\"); });",
+              "pm.collectionVariables.set(\"token_user\", j.data.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Login memakai akun yang dibuat TC-07 (role default user). Token disimpan ke {{token_user}}.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{uname}}\",\n  \"password\": \"rahasia123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "TC-27 Store dengan token role user (403)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-27: status 403\", function () { pm.response.to.have.status(403); });",
+              "pm.test(\"TC-27: pesan akses ditolak\", function () { pm.expect(pm.response.json().message).to.include(\"hanya admin\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"999000111\",\n  \"nama\": \"Percobaan User\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token_user}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "TC-28 Update dengan token role user (403)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-28: status 403\", function () { pm.response.to.have.status(403); });",
+              "pm.test(\"TC-28: pesan akses ditolak\", function () { pm.expect(pm.response.json().message).to.include(\"hanya admin\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nim\": \"{{nim}}\",\n  \"nama\": \"Budi Santoso Putra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token_user}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "TC-29 Destroy dengan token role user (403)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC-29: status 403\", function () { pm.response.to.have.status(403); });",
+              "pm.test(\"TC-29: pesan akses ditolak\", function () { pm.expect(pm.response.json().message).to.include(\"hanya admin\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mahasiswa?id=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mahasiswa"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token_user}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

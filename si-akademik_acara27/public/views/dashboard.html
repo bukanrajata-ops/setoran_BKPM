@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Sistem Informasi Akademik</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Acara 25 - Langkah 4: lindungi halaman sebelum isinya digambar.
+    // Perlindungan sebenarnya tetap di server (Auth::requireAuth/requireAdmin).
+    if (!localStorage.getItem('token')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="bar" style="border:none;padding-left:0;padding-right:0">
+      <div>
+        <h1>Dashboard Admin</h1>
+        <p class="sub" style="margin:0">Peran masuk: <span class="lencana" id="peran">-</span></p>
+      </div>
+      <button type="button" id="tombol-logout" class="bahaya">Logout</button>
+    </div>
+
+    <section class="ringkasan" aria-label="Ringkasan data">
+      <div class="card">
+        <div class="angka" id="total">-</div>
+        <div class="label">Total mahasiswa</div>
+      </div>
+      <div class="card">
+        <div class="angka" id="sisa-sesi">-</div>
+        <div class="label">Sisa masa berlaku sesi</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="bar">
+        <strong>Daftar Mahasiswa</strong>
+        <div class="aksi">
+          <button type="button" id="tombol-muat" class="sekunder">Muat ulang</button>
+          <a href="form_tambah.html" id="tombol-tambah" class="tombol aksi-admin">Tambah</a>
+        </div>
+      </div>
+      <table id="tabel-mahasiswa">
+        <thead><tr><th>Foto</th><th>NIM</th><th>Nama</th><th>Program Studi</th><th class="aksi-admin">Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+    </section>
+  </main>
+
+
+  <script src="common.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

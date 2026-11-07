@@ -1,0 +1,8 @@
+# Folder ini hanya berisi foto. Larang eksekusi skrip dan daftar isi folder (Acara 26).
+Options -Indexes
+<IfModule php_module>
+    php_flag engine off
+</IfModule>
+<FilesMatch "\.(php|phtml|phar|php[0-9])$">
+    Require all denied
+</FilesMatch>
