@@ -1,0 +1,1721 @@
+{
+  "info": {
+    "name": "ACARA 21 - Dokumentasi API SI Akademik",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "# API Sistem Informasi Akademik\n\nDokumentasi endpoint (Acara 21). Setiap request memuat nama Controller dan method penanganannya pada kolom Description, serta contoh response sukses dan gagal pada tab Examples.\n\n**Base URL:** variabel `{{base_url}}` (pilih Environment Local).\n\n**Autentikasi:** jalankan *POST Login* lebih dulu. Token tersimpan otomatis ke variabel `{{token}}` dan berlaku 5 menit. Endpoint bertanda Token memakai `Authorization: Bearer {{token}}` yang diwarisi dari Collection.\n\nDokumentasi lengkap: `docs/API_DOCUMENTATION.md`."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Autentikasi",
+      "description": "AuthController: register dan login (publik).",
+      "item": [
+        {
+          "name": "1. POST Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "**Controller:** `AuthController::register()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMendaftarkan pengguna baru. Kata sandi disimpan sebagai hash (`password_hash()`), dan hash tidak pernah dikembalikan.\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `username` | string | Ya | Nama pengguna, harus unik |\n| `email` | string | Ya | Format email valid (`filter_var`), harus unik |\n| `password` | string | Ya | Kata sandi asli, di-hash sebelum disimpan |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"budi\",\n  \"email\": \"budi@example.com\",\n  \"password\": \"rahasia123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created - Registrasi berhasil",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Registrasi berhasil\",\n  \"data\": {\n    \"id\": \"1\"\n  },\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"budi\",\n  \"email\": \"budi@example.com\",\n  \"password\": \"rahasia123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request - Field kosong",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Username, email, dan password wajib diisi\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"username\": \"Field username wajib diisi\",\n    \"email\": \"Field email wajib diisi\",\n    \"password\": \"Field password wajib diisi\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"\",\n  \"email\": \"\",\n  \"password\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "422 Unprocessable Entity - Format email tidak valid",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Format email tidak valid\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"email\": \"Format email tidak valid\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"siti\",\n  \"email\": \"siti-at-example\",\n  \"password\": \"abc12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "409 Conflict - Username sudah terdaftar",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Username sudah terdaftar\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"username\": \"Username sudah terdaftar\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"budi\",\n  \"email\": \"lain@example.com\",\n  \"password\": \"abc12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "409 Conflict - Email sudah terdaftar",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Email sudah terdaftar\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"email\": \"Email sudah terdaftar\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"budi2\",\n  \"email\": \"budi@example.com\",\n  \"password\": \"abc12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "405 Method Not Allowed - Method bukan POST",
+              "status": "Method Not Allowed",
+              "code": 405,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Method tidak diizinkan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. POST Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "**Controller:** `AuthController::login()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMemverifikasi kata sandi dengan `password_verify()` dan menerbitkan token JWT yang berlaku 5 menit.\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `username` | string | Ya | Nama pengguna terdaftar |\n| `password` | string | Ya | Kata sandi |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"budi\",\n  \"password\": \"rahasia123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Login berhasil",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login berhasil\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIs...<token JWT>\",\n    \"role\": \"user\"\n  },\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"budi\",\n  \"password\": \"rahasia123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request - Field kosong",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Username dan password wajib diisi\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"username\": \"Field username wajib diisi\",\n    \"password\": \"Field password wajib diisi\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"\",\n  \"password\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "401 Unauthorized - Password salah",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Username atau password salah\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"budi\",\n  \"password\": \"salah\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "401 Unauthorized - Username tidak terdaftar",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Username atau password salah\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"hantu\",\n  \"password\": \"apa-saja\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "405 Method Not Allowed - Method bukan POST",
+              "status": "Method Not Allowed",
+              "code": 405,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Method tidak diizinkan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              }
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "    pm.collectionVariables.set(\"token\", json.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mahasiswa",
+      "description": "MahasiswaController. GET publik; POST, PUT, DELETE memerlukan token.",
+      "item": [
+        {
+          "name": "1. GET Semua mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mahasiswa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "description": "**Controller:** `MahasiswaController::index()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMengambil seluruh data mahasiswa (urut id terbaru lebih dulu).\n",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Semua data",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil diambil\",\n  \"data\": [\n    {\n      \"id\": 2,\n      \"nim\": \"220100002\",\n      \"nama\": \"Siti Aminah\",\n      \"prodi\": \"Sistem Informasi\",\n      \"created_at\": \"2026-10-21 10:00:00\"\n    },\n    {\n      \"id\": 1,\n      \"nim\": \"220100001\",\n      \"nama\": \"Budi Santoso\",\n      \"prodi\": \"Teknik Informatika\",\n      \"created_at\": \"2026-10-21 10:00:00\"\n    }\n  ],\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET Satu mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mahasiswa?id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "**Controller:** `MahasiswaController::index()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMengambil satu data mahasiswa berdasarkan id.\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Ya | Id mahasiswa |\n",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Satu data (id=1)",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil diambil\",\n  \"data\": {\n    \"id\": 1,\n    \"nim\": \"220100001\",\n    \"nama\": \"Budi Santoso\",\n    \"prodi\": \"Teknik Informatika\",\n    \"created_at\": \"2026-10-21 10:00:00\"\n  },\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "404 Not Found - Data tidak ditemukan (id=999)",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Data tidak ditemukan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=999",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. POST Tambah mahasiswa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mahasiswa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "description": "**Controller:** `MahasiswaController::store()`\n\n**Autentikasi:** Diperlukan (header `Authorization: Bearer <token>`)\n\nMenambah data mahasiswa baru. Urutan validasi: token (401), field kosong (400), format NIM (422), NIM duplikat (409).\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `nim` | string | Ya | Tepat 9 karakter, harus unik |\n| `nama` | string | Ya | Nama mahasiswa |\n| `prodi` | string | Ya | Program studi |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created - Data berhasil ditambahkan",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil ditambahkan\",\n  \"data\": {\n    \"id\": \"1\"\n  },\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request - Field wajib kosong",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Field nim, nama, dan prodi wajib diisi\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"nim\": \"Field nim wajib diisi\",\n    \"nama\": \"Field nama wajib diisi\",\n    \"prodi\": \"Field prodi wajib diisi\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"\",\n  \"nama\": \"\",\n  \"prodi\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "401 Unauthorized - Tanpa token",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "401 Unauthorized - Token tidak valid",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak valid atau kedaluwarsa\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}x"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "409 Conflict - NIM sudah terdaftar",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"NIM sudah terdaftar\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"nim\": \"NIM sudah terdaftar\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "422 Unprocessable Entity - NIM bukan 9 digit",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Format NIM tidak valid, harus 9 digit\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"nim\": \"NIM harus 9 digit\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"12345\",\n  \"nama\": \"Siti Aminah\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. PUT Ubah mahasiswa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mahasiswa?id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "**Controller:** `MahasiswaController::update()`\n\n**Autentikasi:** Diperlukan (header `Authorization: Bearer <token>`)\n\nMengubah data mahasiswa. Semua field harus dikirim lengkap. NIM milik data itu sendiri tidak dihitung duplikat.\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `nim` | string | Ya | Tepat 9 karakter, unik terhadap data lain |\n| `nama` | string | Ya | Nama mahasiswa |\n| `prodi` | string | Ya | Program studi |\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Ya | Id mahasiswa yang diubah |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso Putra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Data berhasil diperbarui",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil diperbarui\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso Putra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "401 Unauthorized - Tanpa token",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Budi Santoso Putra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "422 Unprocessable Entity - NIM bukan 9 digit",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Format NIM tidak valid, harus 9 digit\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"nim\": \"NIM harus 9 digit\"\n  }\n}",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"1\",\n  \"nama\": \"X\",\n  \"prodi\": \"Y\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "409 Conflict - NIM milik data lain",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"NIM sudah terdaftar\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"nim\": \"NIM sudah terdaftar\"\n  }\n}",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nim\": \"220100001\",\n  \"nama\": \"Siti Aminah\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. DELETE Hapus mahasiswa",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mahasiswa?id=2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "**Controller:** `MahasiswaController::destroy()`\n\n**Autentikasi:** Diperlukan (header `Authorization: Bearer <token>`)\n\nMenghapus data mahasiswa berdasarkan id.\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Ya | Id mahasiswa yang dihapus |\n"
+          },
+          "response": [
+            {
+              "name": "401 Unauthorized - Tanpa token",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "200 OK - Data berhasil dihapus",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil dihapus\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/mahasiswa?id=2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "mahasiswa"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Buku (tambahan)",
+      "description": "BukuController. Belum diproteksi token.",
+      "item": [
+        {
+          "name": "1. POST Tambah buku",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/buku",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            },
+            "description": "**Controller:** `BukuController::store()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMenambah data buku (endpoint tambahan latihan, belum diproteksi token).\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `judul` | string | Ya | Judul buku |\n| `penulis` | string | Ya | Nama penulis |\n| `tahun` | integer | Ya | Tahun terbit |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Pemrograman PHP Dasar\",\n  \"penulis\": \"Rina Putri\",\n  \"tahun\": 2024\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created - Data berhasil ditambahkan",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil ditambahkan\",\n  \"data\": {\n    \"id\": \"1\"\n  },\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"judul\": \"Pemrograman PHP Dasar\",\n  \"penulis\": \"Rina Putri\",\n  \"tahun\": 2024\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request - Field wajib kosong",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Field judul, penulis, dan tahun wajib diisi\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\",\n  \"errors\": {\n    \"penulis\": \"Field penulis wajib diisi\",\n    \"tahun\": \"Field tahun wajib diisi\"\n  }\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"judul\": \"Tanpa Penulis\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. GET Data buku",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/buku",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            },
+            "description": "**Controller:** `BukuController::index()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMengambil seluruh data buku, atau satu data bila parameter `id` dikirim.\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Tidak | Id buku; bila kosong, seluruh data dikembalikan |\n",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Semua data",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil diambil\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"judul\": \"Pemrograman PHP Dasar\",\n      \"penulis\": \"Rina Putri\",\n      \"tahun\": 2024,\n      \"created_at\": \"2026-10-21 10:00:00\"\n    }\n  ],\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "404 Not Found - Data tidak ditemukan (id=999)",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Data tidak ditemukan\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku?id=999",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. PUT Ubah buku",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/buku?id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "**Controller:** `BukuController::update()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMengubah data buku (belum diproteksi token).\n\n**Request body:**\n\n| Field | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `judul` | string | Ya | Judul buku |\n| `penulis` | string | Ya | Nama penulis |\n| `tahun` | integer | Ya | Tahun terbit |\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Ya | Id buku |\n",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Pemrograman PHP Dasar (Edisi 2)\",\n  \"penulis\": \"Rina Putri\",\n  \"tahun\": 2025\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Data berhasil diperbarui",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil diperbarui\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"judul\": \"Pemrograman PHP Dasar (Edisi 2)\",\n  \"penulis\": \"Rina Putri\",\n  \"tahun\": 2025\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. DELETE Hapus buku",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/buku?id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "**Controller:** `BukuController::destroy()`\n\n**Autentikasi:** Tidak diperlukan (publik)\n\nMenghapus data buku (belum diproteksi token).\n\n**Query parameter:**\n\n| Parameter | Tipe | Wajib | Keterangan |\n|---|---|---|---|\n| `id` | integer | Ya | Id buku |\n",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Data berhasil dihapus",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data berhasil dihapus\",\n  \"data\": null,\n  \"timestamp\": \"2026-10-21T10:00:00+07:00\"\n}",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/buku?id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "buku"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

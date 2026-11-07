@@ -1,0 +1,794 @@
+openapi: 3.0.0
+info:
+  title: API Sistem Informasi Akademik (MVC)
+  version: 1.0.0
+  description: 'Dokumentasi OpenAPI untuk API Sistem Informasi Akademik (PHP Native, arsitektur MVC).
+    Path mengikuti resource pada peta Router, bukan nama berkas .php. Endpoint yang bertanda gembok memerlukan
+    header `Authorization: Bearer <token>`; token diperoleh dari `POST /login` dan berlaku 5 menit.'
+servers:
+- url: http://localhost/setoran_BKPM-1/si-akademik_acara22/public
+  description: Server lokal (XAMPP)
+security: []
+tags:
+- name: Autentikasi
+  description: AuthController
+- name: Mahasiswa
+  description: MahasiswaController
+- name: Buku
+  description: BukuController (tambahan latihan, belum diproteksi token)
+paths:
+  /register:
+    post:
+      operationId: register
+      tags:
+      - Autentikasi
+      summary: Mendaftarkan pengguna baru (AuthController::register)
+      description: Kata sandi disimpan sebagai hash (`password_hash`). Method selain POST dijawab 405.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterInput'
+            example:
+              username: budi
+              email: budi@example.com
+              password: rahasia123
+      responses:
+        '201':
+          description: Registrasi berhasil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Registrasi berhasil
+                  value:
+                    success: true
+                    message: Registrasi berhasil
+                    data:
+                      id: '1'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '400':
+          description: Field wajib kosong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                kosong:
+                  summary: Field kosong
+                  value:
+                    success: false
+                    message: Username, email, dan password wajib diisi
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      username: Field username wajib diisi
+                      email: Field email wajib diisi
+                      password: Field password wajib diisi
+        '409':
+          description: Username atau email sudah terdaftar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                username:
+                  summary: Username sudah terdaftar
+                  value:
+                    success: false
+                    message: Username sudah terdaftar
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      username: Username sudah terdaftar
+                email:
+                  summary: Email sudah terdaftar
+                  value:
+                    success: false
+                    message: Email sudah terdaftar
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      email: Email sudah terdaftar
+        '422':
+          description: Format email tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                email:
+                  summary: Format email tidak valid
+                  value:
+                    success: false
+                    message: Format email tidak valid
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      email: Format email tidak valid
+  /login:
+    post:
+      operationId: login
+      tags:
+      - Autentikasi
+      summary: Autentikasi pengguna (AuthController::login)
+      description: Memverifikasi kata sandi dengan `password_verify` dan menerbitkan token JWT (HS256)
+        yang berlaku 300 detik. Method selain POST dijawab 405.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+            example:
+              username: budi
+              password: rahasia123
+      responses:
+        '200':
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                sukses:
+                  summary: Login berhasil
+                  value:
+                    success: true
+                    message: Login berhasil
+                    data:
+                      token: eyJhbGciOiJIUzI1NiIs...<token JWT>
+                      role: user
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '400':
+          description: Username atau password kosong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                kosong:
+                  summary: Field kosong
+                  value:
+                    success: false
+                    message: Username dan password wajib diisi
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      username: Field username wajib diisi
+                      password: Field password wajib diisi
+        '401':
+          description: Kredensial tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                password-salah:
+                  summary: Password salah
+                  value:
+                    success: false
+                    message: Username atau password salah
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                username-tidak-ada:
+                  summary: Username tidak terdaftar
+                  value:
+                    success: false
+                    message: Username atau password salah
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+  /mahasiswa:
+    get:
+      operationId: getMahasiswa
+      tags:
+      - Mahasiswa
+      summary: Mengambil data mahasiswa (MahasiswaController::index)
+      description: Tanpa parameter `id`, seluruh data dikembalikan sebagai array. Dengan `id`, satu data
+        dikembalikan sebagai objek. Endpoint ini publik.
+      parameters:
+      - name: id
+        in: query
+        required: false
+        description: Id mahasiswa (opsional)
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      responses:
+        '200':
+          description: Data berhasil diambil
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/MahasiswaListResponse'
+                - $ref: '#/components/schemas/MahasiswaResponse'
+              examples:
+                semua-data:
+                  summary: Semua data
+                  value:
+                    success: true
+                    message: Data berhasil diambil
+                    data:
+                    - id: '2'
+                      nim: '220100002'
+                      nama: Siti Aminah
+                      prodi: Sistem Informasi
+                      created_at: '2026-10-21 10:00:00'
+                    - id: '1'
+                      nim: '220100001'
+                      nama: Budi Santoso
+                      prodi: Teknik Informatika
+                      created_at: '2026-10-21 10:00:00'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                satu-data:
+                  summary: Satu data (id=1)
+                  value:
+                    success: true
+                    message: Data berhasil diambil
+                    data:
+                      id: '1'
+                      nim: '220100001'
+                      nama: Budi Santoso
+                      prodi: Teknik Informatika
+                      created_at: '2026-10-21 10:00:00'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '404':
+          description: Data dengan id tersebut tidak ada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                tidak-ditemukan:
+                  summary: id=999
+                  value:
+                    success: false
+                    message: Data tidak ditemukan
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+    post:
+      operationId: createMahasiswa
+      tags:
+      - Mahasiswa
+      summary: Menambahkan data mahasiswa (MahasiswaController::store)
+      description: 'Urutan validasi: token (401), field kosong (400), format NIM 9 karakter (422), NIM
+        duplikat (409).'
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MahasiswaInput'
+            example:
+              nim: '220100001'
+              nama: Budi Santoso
+              prodi: Teknik Informatika
+      responses:
+        '201':
+          description: Data berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil ditambahkan
+                  value:
+                    success: true
+                    message: Data berhasil ditambahkan
+                    data:
+                      id: '1'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '400':
+          description: Field wajib kosong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                kosong:
+                  summary: Field kosong
+                  value:
+                    success: false
+                    message: Field nim, nama, dan prodi wajib diisi
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      nim: Field nim wajib diisi
+                      nama: Field nama wajib diisi
+                      prodi: Field prodi wajib diisi
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: NIM sudah terdaftar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                duplikat:
+                  summary: NIM sudah terdaftar
+                  value:
+                    success: false
+                    message: NIM sudah terdaftar
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      nim: NIM sudah terdaftar
+        '422':
+          description: NIM bukan 9 karakter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                nim:
+                  summary: NIM bukan 9 digit
+                  value:
+                    success: false
+                    message: Format NIM tidak valid, harus 9 digit
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      nim: NIM harus 9 digit
+    put:
+      operationId: updateMahasiswa
+      tags:
+      - Mahasiswa
+      summary: Mengubah data mahasiswa (MahasiswaController::update)
+      description: 'Semua field harus dikirim lengkap. Perhatian: keberadaan `id` tidak diperiksa sehingga
+        `id` yang tidak ada tetap dijawab 200, dan body `{}` menghasilkan 500 tanpa JSON.'
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: query
+        required: true
+        description: Id mahasiswa yang diubah
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MahasiswaInput'
+            example:
+              nim: '220100001'
+              nama: Budi Santoso Putra
+              prodi: Teknik Informatika
+      responses:
+        '200':
+          description: Data berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil diperbarui
+                  value:
+                    success: true
+                    message: Data berhasil diperbarui
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: NIM milik data lain
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                duplikat:
+                  summary: NIM milik data lain
+                  value:
+                    success: false
+                    message: NIM sudah terdaftar
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      nim: NIM sudah terdaftar
+        '422':
+          description: NIM bukan 9 karakter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                nim:
+                  summary: NIM bukan 9 digit
+                  value:
+                    success: false
+                    message: Format NIM tidak valid, harus 9 digit
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      nim: NIM harus 9 digit
+    delete:
+      operationId: deleteMahasiswa
+      tags:
+      - Mahasiswa
+      summary: Menghapus data mahasiswa (MahasiswaController::destroy)
+      description: 'Perhatian: keberadaan `id` tidak diperiksa sehingga `id` yang tidak ada tetap dijawab
+        200.'
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: query
+        required: true
+        description: Id mahasiswa yang dihapus
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      responses:
+        '200':
+          description: Data berhasil dihapus
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil dihapus
+                  value:
+                    success: true
+                    message: Data berhasil dihapus
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /buku:
+    get:
+      operationId: getBuku
+      tags:
+      - Buku
+      summary: Mengambil data buku (BukuController::index)
+      parameters:
+      - name: id
+        in: query
+        required: false
+        description: Id buku (opsional)
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      responses:
+        '200':
+          description: Data berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                semua-data:
+                  summary: Semua data
+                  value:
+                    success: true
+                    message: Data berhasil diambil
+                    data:
+                    - id: '1'
+                      judul: Pemrograman PHP Dasar
+                      penulis: Rina Putri
+                      tahun: 2024
+                      created_at: '2026-10-21 10:00:00'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '404':
+          description: Data dengan id tersebut tidak ada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                tidak-ditemukan:
+                  summary: id=999
+                  value:
+                    success: false
+                    message: Data tidak ditemukan
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+    post:
+      operationId: createBuku
+      tags:
+      - Buku
+      summary: Menambahkan data buku (BukuController::store)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BukuInput'
+            example:
+              judul: Pemrograman PHP Dasar
+              penulis: Rina Putri
+              tahun: 2024
+      responses:
+        '201':
+          description: Data berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil ditambahkan
+                  value:
+                    success: true
+                    message: Data berhasil ditambahkan
+                    data:
+                      id: '1'
+                    timestamp: '2026-10-21T10:00:00+07:00'
+        '400':
+          description: Field wajib kosong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                kosong:
+                  summary: Field kosong
+                  value:
+                    success: false
+                    message: Field judul, penulis, dan tahun wajib diisi
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+                    errors:
+                      penulis: Field penulis wajib diisi
+                      tahun: Field tahun wajib diisi
+    put:
+      operationId: updateBuku
+      tags:
+      - Buku
+      summary: Mengubah data buku (BukuController::update)
+      parameters:
+      - name: id
+        in: query
+        required: true
+        description: Id buku yang diubah
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BukuInput'
+            example:
+              judul: Pemrograman PHP Dasar (Edisi 2)
+              penulis: Rina Putri
+              tahun: 2025
+      responses:
+        '200':
+          description: Data berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil diperbarui
+                  value:
+                    success: true
+                    message: Data berhasil diperbarui
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+    delete:
+      operationId: deleteBuku
+      tags:
+      - Buku
+      summary: Menghapus data buku (BukuController::destroy)
+      parameters:
+      - name: id
+        in: query
+        required: true
+        description: Id buku yang dihapus
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      responses:
+        '200':
+          description: Data berhasil dihapus
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                sukses:
+                  summary: Data berhasil dihapus
+                  value:
+                    success: true
+                    message: Data berhasil dihapus
+                    data: null
+                    timestamp: '2026-10-21T10:00:00+07:00'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Token JWT dari `POST /login`. Berlaku 5 menit. Kirim sebagai `Authorization: Bearer
+        <token>`.'
+  responses:
+    Unauthorized:
+      description: Token tidak ada, tidak valid, atau kedaluwarsa
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            tanpa-token:
+              summary: Header Authorization tidak ada
+              value:
+                success: false
+                message: Token tidak ditemukan
+                data: null
+                timestamp: '2026-10-21T10:00:00+07:00'
+            token-tidak-valid:
+              summary: Token diubah atau kedaluwarsa
+              value:
+                success: false
+                message: Token tidak valid atau kedaluwarsa
+                data: null
+                timestamp: '2026-10-21T10:00:00+07:00'
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+      - success
+      - message
+      - timestamp
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          description: Isi data (objek, array, atau null bila tidak ada)
+        timestamp:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required:
+      - success
+      - message
+      - timestamp
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          example: null
+          description: Selalu null pada response kesalahan
+        timestamp:
+          type: string
+          format: date-time
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          description: Pesan per field; hanya muncul bila ada kesalahan validasi
+    RegisterInput:
+      type: object
+      required:
+      - username
+      - email
+      - password
+      properties:
+        username:
+          type: string
+          description: Harus unik
+        email:
+          type: string
+          format: email
+          description: Harus unik
+        password:
+          type: string
+          format: password
+    LoginInput:
+      type: object
+      required:
+      - username
+      - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+    LoginResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Token JWT
+              role:
+                type: string
+                enum:
+                - admin
+                - user
+    MahasiswaInput:
+      type: object
+      required:
+      - nim
+      - nama
+      - prodi
+      properties:
+        nim:
+          type: string
+          minLength: 9
+          maxLength: 9
+          description: Tepat 9 karakter, harus unik
+        nama:
+          type: string
+        prodi:
+          type: string
+    Mahasiswa:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Dikirim sebagai string oleh PDO pada konfigurasi XAMPP
+        nim:
+          type: string
+        nama:
+          type: string
+        prodi:
+          type: string
+        created_at:
+          type: string
+    MahasiswaResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Mahasiswa'
+    MahasiswaListResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Mahasiswa'
+    BukuInput:
+      type: object
+      required:
+      - judul
+      - penulis
+      - tahun
+      properties:
+        judul:
+          type: string
+        penulis:
+          type: string
+        tahun:
+          type: integer
