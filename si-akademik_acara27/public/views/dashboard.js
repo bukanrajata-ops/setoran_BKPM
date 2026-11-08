@@ -145,4 +145,3 @@ document.addEventListener('DOMContentLoaded', () => {
     Notifikasi.tampilkanTersimpan();         // pesan hasil tambah/ubah dari halaman form
     muatDataMahasiswa();
 });
-
