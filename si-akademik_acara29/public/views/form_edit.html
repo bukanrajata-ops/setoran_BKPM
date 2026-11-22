@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ubah Mahasiswa - Sistem Informasi Akademik</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    if (!localStorage.getItem('token')) { window.location.href = 'login.html'; }
+  </script>
+</head>
+<body>
+  <main class="halaman-form">
+    <section class="card">
+      <div class="card-header">Ubah Mahasiswa</div>
+      <div class="card-body">
+        <div id="status" class="status" role="status" aria-live="polite">Memuat data...</div>
+        <form id="form-mahasiswa" novalidate enctype="multipart/form-data" hidden>
+          <label for="foto">Foto (JPG/PNG, maks. 2 MB; kosongkan bila tidak diganti)</label>
+          <img id="pratinjau-foto" class="pratinjau" alt="Pratinjau foto" hidden>
+          <input type="file" id="foto" name="foto" accept="image/png,image/jpeg">
+          <div class="galat-field" data-field="foto"></div>
+          <label for="nim">NIM</label>
+          <input type="text" id="nim" name="nim" maxlength="9" autocomplete="off">
+          <div class="galat-field" data-field="nim"></div>
+          <label for="nama">Nama</label>
+          <input type="text" id="nama" name="nama" autocomplete="off">
+          <div class="galat-field" data-field="nama"></div>
+          <label for="prodi">Program Studi</label>
+          <input type="text" id="prodi" name="prodi" autocomplete="off">
+          <div class="galat-field" data-field="prodi"></div>
+          <div class="aksi">
+            <a href="dashboard.html" class="tombol sekunder">Batal</a>
+            <button type="submit" id="tombol-simpan">Simpan perubahan</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="common.js"></script>
+  <script src="form_edit.js"></script>
+</body>
+</html>
