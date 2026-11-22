@@ -1,0 +1,8 @@
+# Acara 28: app/ berada di dalam htdocs, akses langsung dari browser ditolak (403)
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

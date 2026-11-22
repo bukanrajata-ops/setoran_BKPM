@@ -1,0 +1,4 @@
+# Acara 30: kredensial dan log tidak ikut ke Git
+app/config/credentials.php
+app/logs/*.log
+backup/hasil/

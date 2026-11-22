@@ -1,0 +1,26 @@
+RewriteEngine On
+
+# Acara 30, Langkah 2: arahkan seluruh trafik HTTP ke HTTPS (301).
+# Syarat kedua mencegah perulangan redirect bila SSL diakhiri di proxy/CDN hosting
+# (proxy meneruskan header X-Forwarded-Proto: https).
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Teruskan header Authorization ke PHP (Apache/XAMPP kadang membuangnya)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# public/.htaccess (tambahan)
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+ 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
